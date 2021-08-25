@@ -1,12 +1,16 @@
 include:
   # you can include another project in your git repo servier
-  - project: "csdbksvc/pipelines"
-    file: "helm-docker.yml"
+  - project: 'mygroup/myproject'
     ref: master
+    file: 
+      - 'helm-docker.yml'
+      - 'docker-build.yml'
   # include from accessible repo
   - 'https://gitlab.com/awesome-project/raw/main/.before-script-template.yml'
   # include local file
-  - 'gitlab-ci-template.yml'
+  - local: 'gitlab-ci-template.yml'
+  - local: '/templates/gitlab-ci-template.yml'
+  - local: '/pipeline/*.yml'
 
 stages:
   - build
