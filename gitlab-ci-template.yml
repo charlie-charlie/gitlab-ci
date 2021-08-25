@@ -1,0 +1,17 @@
+.build-container:
+  image:
+    name: docker:stable
+  services:
+    - name: docker:18.09.7-dind
+      command: ["--registry-mirror", "https://dockerhub.artifactory.otxlab.net"]
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    TAG: ${DOCKER_TAG}
+    DOCKER_REPO_URL: artifactory.otxlab.net/csdbksvc-docker
+    DOCKER_APP: ${DOCKER_APP}
+  script:
+    - docker login -u $REPO_USER -p $REPO_PASSWORD artifactory.otxlab.net
+    - cd ${CI_PROJECT_DIR}/${DOCKER_APP}
+    - docker build -t ${DOCKER_REPO_URL}/${DOCKER_APP}:${TAG} .
+    - docker -D push ${DOCKER_REPO_URL}/${DOCKER_APP}:${TAG}
+

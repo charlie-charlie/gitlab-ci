@@ -1,0 +1,30 @@
+include:
+  # you can include another project in your git repo servier
+  - project: "csdbksvc/pipelines"
+    file: "helm-docker.yml"
+    ref: master
+  # include from accessible repo
+  - 'https://gitlab.com/awesome-project/raw/main/.before-script-template.yml'
+  # include local file
+  - 'gitlab-ci-template.yml'
+
+stages:
+  - build
+
+
+build-elasticsearch:
+  stage: build
+  extends: .build-container
+  variables:
+    DOCKER_TAG: 7.9.1
+    DOCKER_APP: elasticsearch
+  # when file changed in specific folder elasticsearch, run this stage
+  only:
+    changes:
+      - elasticsearch/*
+  # use specific runner with tag
+  tags:
+    - ubmcluster
+
+
+
